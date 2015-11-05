@@ -10,14 +10,14 @@
 ##Java-style Quickstart
 
 Версия 1.1 и выше
-0. Важные отличия новой версии:
+# 0. Важные отличия новой версии:
 
 - Работа с данными происходит через возвращаемые списки требуемых данных.
 - Приложению не нужно объявлять контент провайдер и т.д у себя в манифесте и производить собственные запросы к данным (хотя, это и возможно, через контент провайдер библиотеки)
 
 
-# 1. Для работы с SDK необходимо выполнить его инициализацию одним из статических методов sdkInitialize(...)
-
+# 1. Нaчало работы с sdk
+Для работы с SDK необходимо выполнить его инициализацию одним из статических методов sdkInitialize(...)
 Например:
 ```
 AllyChatSdk.sdkInitialize(getApplicationContext(), "Apa91bezz5bnw1-MQciijcNOi1w_uy6GQ2wmlnMbLloFlcV9h1NgPDocVObOfmhsfMPqlyghYgykjOmVBLlDPscDfhMyR8zmnuTjppDtTaujYEByodc5zK6EXvw3jioW6cHqzCkTTzi1", "alfa-dev.allychat.ru", "my_alias", "mobile");
@@ -25,7 +25,8 @@ AllyChatSdk.sdkInitialize(getApplicationContext(), "Apa91bezz5bnw1-MQciijcNOi1w_
 
 При указании device token произойдет автоматическая подписка на Push сообщения. Дополнительных действий для подписки производить не нужно.
 
-# 2. Все методы Api аналогичны методам предудущей версии:
+# 2. Методы API
+
     public static void sendMessage(Message message)
 
     public static void resendMessage(String messageLocalId)
@@ -65,7 +66,8 @@ AllyChatSdk.sdkInitialize(getApplicationContext(), "Apa91bezz5bnw1-MQciijcNOi1w_
 ```
     В случае возниктовения ошибочной ситуации, будет вызван метод onError переданного callback.
 
-# 3. Для отправки сообщений и получения входящих, необходимо подписаться на соответствующие обратные вызовы при помощи соответствующих статических методов класса AllyChatSdk:
+# 3. Отправка и получение сообщений
+Для отправки сообщений и получения входящих, необходимо подписаться на соответствующие обратные вызовы при помощи соответствующих статических методов класса AllyChatSdk:
 ```
     public static void registerMessagesStatusListener(MessageStatusCallback listener) {
         messagesStatusListeners.add(listener);
@@ -93,7 +95,8 @@ AllyChatSdk.sdkInitialize(getApplicationContext(), "Apa91bezz5bnw1-MQciijcNOi1w_
         message.setFileAttachmentURL(imageCaptureUri); // если требуется отсылка картинки, то передавать uri файла этой картинки
         AllyChatApi.sendMessage(message);
         
-# 4 Метод public static void readMessage(final String messageLocalId)
+# 4 Уведомление о прочитанном сообщении
+Метод public static void readMessage(final String messageLocalId)
 
 Уведомление о завершении операции приходит в общий MessageStatusCallback на который клиент подписывается посредством 
 public static void registerMessagesStatusListener(MessageStatusCallback listener)
