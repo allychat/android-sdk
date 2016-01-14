@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sergeymild.allychatdemo.view.chat.ChatRoomView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <com.sergeymild.allychatdemo.view.chat.ChatMessagesListView
+        android:id="@+id/messages_list_view"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.sergeymild.allychatdemo.view.chat.ChatMessagesListView>
+
+
+    <com.sergeymild.allychatdemo.view.EnterMessageView
+        android:id="@+id/enter_message_view"
+        android:layout_width="match_parent"
+        android:background="@android:color/white"
+        android:layout_gravity="bottom"
+        android:elevation="10dp"
+
+        android:gravity="center_vertical"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content">
+
+
+        <ImageButton
+            android:id="@+id/choose_attachment"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_plus"
+            android:background="?attr/selectableItemBackground"
+            android:layout_gravity="start|bottom"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"/>
+
+        <EditText
+            android:id="@+id/message_edit_text"
+            android:layout_width="match_parent"
+            android:hint="@string/chat_placeholder"
+            android:textColorHint="#cccccc"
+            android:background="@android:color/transparent"
+            android:maxLines="4"
+            android:layout_marginLeft="?attr/actionBarSize"
+            android:layout_marginRight="?attr/actionBarSize"
+            android:minHeight="?attr/actionBarSize"
+            android:layout_height="wrap_content"/>
+
+        <ImageButton
+            android:id="@+id/send_message"
+            android:contentDescription="@null"
+            android:layout_gravity="end|bottom"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_send_message"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"/>
+
+
+    </com.sergeymild.allychatdemo.view.EnterMessageView>
+
+</com.sergeymild.allychatdemo.view.chat.ChatRoomView>

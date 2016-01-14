@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_id": "allychat-demo",
+    "project_number": "39732375091",
+    "name": "AllyChat-Demo"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39732375091:android:4ae77edaccb36aee",
+        "client_id": "android:com.sergeymild.allychatdemo",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.sergeymild.allychatdemo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
