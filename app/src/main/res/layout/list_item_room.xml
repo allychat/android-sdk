@@ -69,41 +69,34 @@
             android:layout_marginRight="16dp"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:layout_marginRight="32dp"
-                    android:layout_marginEnd="32dp"
-                    tools:text="Dominika Faniz"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    tools:text="sat"
-                    android:textColor="#b3b2b8"/>
-
-            </FrameLayout>
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_marginRight="32dp"
+                android:layout_marginEnd="32dp"
+                tools:text="Dominika Faniz"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="32dp"
-                android:layout_marginEnd="32dp"
-                android:ellipsize="marquee"
+                android:ellipsize="end"
                 android:singleLine="true"
                 tools:text="Hi jackub, How is it going? Hi jackub, How is it going Hi jackub, How is it going"
                 android:textColor="#8d8c91"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                tools:text="sat"
+                android:textColor="#b3b2b8"/>
 
         </LinearLayout>
 

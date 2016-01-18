@@ -18,7 +18,10 @@ import com.sergeymild.chat.models.Message;
 import com.sergeymild.chat.models.MessageStatus;
 import com.sergeymild.chat.services.http.ChatUtils;
 import com.sergeymild.event_bus.EventBus;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,13 +30,24 @@ import butterknife.ButterKnife;
  * Created by sergeyMild on 09/12/15.
  */
 public class ChatMessageItemView extends LinearLayout implements IListItemView<Message> {
-    @Bind(R.id.message_text)                    TextView messageTextView;
-    @Bind(R.id.message_image) RoundedImageView messageFileImage;
-    @Nullable @Bind(R.id.not_sended_message)    TextView notSendedMessageTextView;
-    @Nullable @Bind(R.id.image_container)       FrameLayout imageContainer;
-    @Nullable @Bind(R.id.upload_image_progress) ProgressBar uploadImageProgress;
-
+    @Bind(R.id.message_text)                    protected TextView messageTextView;
+    @Bind(R.id.message_image)                   protected RoundedImageView messageFileImage;
+    @Nullable @Bind(R.id.not_sended_message)    protected TextView notSendedMessageTextView;
+    @Nullable @Bind(R.id.image_container)       protected FrameLayout imageContainer;
+    @Nullable @Bind(R.id.upload_image_progress) protected ProgressBar uploadImageProgress;
     private Message entity;
+
+    private Callback imageLoadCallback =  new Callback() {
+        @Override
+        public void onSuccess() {
+            if (uploadImageProgress != null) uploadImageProgress.setVisibility(GONE);
+        }
+
+        @Override
+        public void onError() {
+            if (uploadImageProgress != null) uploadImageProgress.setVisibility(GONE);
+        }
+    };
 
     public ChatMessageItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -56,6 +70,8 @@ public class ChatMessageItemView extends LinearLayout implements IListItemView<M
     @Override
     public void populate(Message entity) {
         this.entity = entity;
+        Log.d("messageStatus", entity.getNameStatus());
+        Log.d("messageStatus", "------------------------");
 
         if (TextUtils.isEmpty(entity.getMessage())) {
             messageTextView.setVisibility(GONE);
@@ -81,15 +97,27 @@ public class ChatMessageItemView extends LinearLayout implements IListItemView<M
                 imageContainer.setVisibility(GONE);
             } else {
                 imageContainer.setVisibility(VISIBLE);
-                Picasso.with(getContext()).load(entity.getFile())
-                        .placeholder(R.drawable.ic_image_placeholder)
-                        .into(messageFileImage);
+                if (entity.getFile().startsWith("https")) {
+                    uploadImageProgress.setVisibility(VISIBLE);
+                    Picasso.with(getContext()).load(entity.getFile())
+                            .resize(300, 300)
+                            .placeholder(R.drawable.ic_image_placeholder)
+                            .into(messageFileImage, imageLoadCallback);
 
+                } else {
+                    uploadImageProgress.setVisibility(VISIBLE);
+                    Picasso.with(getContext()).load(new File(entity.getFile()))
+                            .resize(300, 300)
+                            .placeholder(R.drawable.ic_image_placeholder)
+                            .into(messageFileImage, imageLoadCallback);
+                }
                 if (entity.getStatus() == MessageStatus.STATUS_SENDING) {
+                    Log.d("message", "image not empty status sending " + entity.getMessage());
                     uploadImageProgress.setVisibility(VISIBLE);
                 }
 
                 if (entity.getStatus() == MessageStatus.STATUS_SEND) {
+                    Log.d("message", "image not empty status send " + entity.getMessage());
                     uploadImageProgress.setVisibility(GONE);
                 }
 
@@ -103,8 +131,6 @@ public class ChatMessageItemView extends LinearLayout implements IListItemView<M
 
 
         if (!entity.isRead()) {
-            Log.d("logger", "update read " + entity.getMessage());
-            //TODO как делать update если мы скрыли id??
             ChatUtils.readMessage(entity);
         }
     }

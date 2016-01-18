@@ -1,5 +1,6 @@
 package com.sergeymild.allychatdemo;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,20 +19,19 @@ import com.sergeymild.chat.models.Message;
 import com.sergeymild.chat.services.http.ChatUtils;
 import com.sergeymild.chat.utils.Checks;
 import com.sergeymild.event_bus.EventBus;
+import com.sergeymild.filepicker.ChooseDialog;
+import com.sergeymild.filepicker.GalleryConstants;
+import com.sergeymild.filepicker.models.PhotoEntry;
 
 import java.io.File;
 import java.util.List;
-
-import sergeymild.com.library.ChooseDialog;
-import sergeymild.com.library.GalleryActivity;
-import sergeymild.com.library.models.PhotoEntry;
 
 /**
  * Created by sergeyMild on 08/12/15.
  */
 public class ChatFragment extends Fragment implements NetworkStateListener, OperatorChatFragmentCallbacks, OnMessage {
     public static final String TAG = "ChatFragment";
-    private String absolutePath;
+    private ChatActivity chatActivity;
     private int MESSAGE_LOADING_COUNT = 50;
 
     private IChatRoomView roomView;
@@ -47,6 +47,11 @@ public class ChatFragment extends Fragment implements NetworkStateListener, Oper
         return chatFragment;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        chatActivity = (ChatActivity) activity;
+    }
 
     @Nullable
     @Override
@@ -130,18 +135,8 @@ public class ChatFragment extends Fragment implements NetworkStateListener, Oper
     @Override
     public void choosePhoto() {
         new ChooseDialog(getActivity())
-                .setChooseDialogListener(new ChooseDialog.ChooseDialogListener() {
-                    @Override
-                    public void onCamera(Intent takePictureIntent, String absolutePath) {
-                        ChatFragment.this.absolutePath = absolutePath;
-                        startActivityForResult(takePictureIntent, CAMERA_PHOTO);
-                    }
-
-                    @Override
-                    public void onGallery() {
-                        startActivityForResult(new Intent(getActivity(), GalleryActivity.class), GalleryActivity.REQUEST_CODE);
-                    }
-                })
+                .setFragmentForResult(this)
+                .setOnPathGenerated(path -> chatActivity.absolutePath = path)
                 .show();
     }
 
@@ -163,19 +158,26 @@ public class ChatFragment extends Fragment implements NetworkStateListener, Oper
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_PHOTO && new File(absolutePath).exists()) {
-            ChatUtils.buildAndSend("support", "", absolutePath);
-            return;
+        if (resultCode == GalleryConstants.FAIL || resultCode == Activity.RESULT_CANCELED) return;
+
+        String path = null;
+        switch (requestCode) {
+            case GalleryConstants.CAMERA_REQUEST_CODE:
+                path = chatActivity.absolutePath;
+                break;
+            case GalleryConstants.GALLERY_REQUEST_CODE:
+                PhotoEntry photoEntry = (PhotoEntry) data.getExtras().getSerializable(GalleryConstants.PHOTO_ENTRY);
+                path = photoEntry.path;
+                break;
+            case GalleryConstants.FILES_REQUEST_CODE:
+                String file = data.getExtras().getString(GalleryConstants.FILE_ENTRY);
+                path = file;
         }
 
-        if (requestCode != GalleryActivity.REQUEST_CODE) return;
-        if (resultCode == GalleryActivity.SUCCESS) {
-            PhotoEntry photoEntry = (PhotoEntry) data.getExtras().getSerializable(GalleryActivity.PHOTO_ENTRY);
-            if (photoEntry != null && !TextUtils.isEmpty(photoEntry.path) && new File(photoEntry.path).exists()) {
-                Message message = ChatUtils.buildMessage("support", "", photoEntry.path);
-                roomView.addMessageToList(message);
-                ChatUtils.sendMessage(message);
-            }
+        if (!TextUtils.isEmpty(path) && new File(path).exists()) {
+            Message message = ChatUtils.buildMessage("support", "", path);
+            roomView.addMessageToList(message);
+            ChatUtils.sendMessage(message);
         }
     }
 }

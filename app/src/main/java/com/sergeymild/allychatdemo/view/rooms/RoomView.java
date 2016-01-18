@@ -8,14 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sergeymild.allychatdemo.R;
+import com.sergeymild.allychatdemo.utils.PrintDateUtils;
 import com.sergeymild.allychatdemo.view.IListItemView;
 import com.sergeymild.chat.models.Message;
 import com.sergeymild.chat.models.Room;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,8 +28,6 @@ public class RoomView extends FrameLayout implements IListItemView<Room> {
     @Bind(R.id.message)                 TextView message;
     @Bind(R.id.date)                    TextView date;
     @Bind(R.id.message_count_container) View messageCountContainer;
-
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("E", Locale.getDefault());
 
     public RoomView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -63,7 +59,6 @@ public class RoomView extends FrameLayout implements IListItemView<Room> {
 //            messageCountContainer.setVisibility(VISIBLE);
 //            messageCount.setText(String.valueOf(integer));
 //        }
-
         if (lastMessage != null) {
             if (!isNull(lastMessage.getUser().getName())) {
                 userName.setText(lastMessage.getUser().getName());
@@ -75,6 +70,8 @@ public class RoomView extends FrameLayout implements IListItemView<Room> {
                 avatar.setVisibility(VISIBLE);
                 Picasso.with(getContext())
                         .load(lastMessage.getUser().getAvatarUrl())
+                        .resize(80, 80)
+                        .centerCrop()
                         .placeholder(R.drawable.avatar)
                         .into(avatar, new Callback() {
                             @Override
@@ -86,24 +83,27 @@ public class RoomView extends FrameLayout implements IListItemView<Room> {
                             }
                         });
             } else {
-                avatar.setVisibility(GONE);
+                avatar.setImageResource(R.drawable.avatar);
             }
 
             if (!isNull(lastMessage.getMessage())){
                 message.setText(lastMessage.getMessage());
+            } else if (!isNull(lastMessage.getFile())) {
+                message.setText(R.string.last_message_image);
             }
 
             if (!isNull(lastMessage.getCreatedAtMillis())) {
+                String dateString = PrintDateUtils.getFormattedDateForRoomLastMessage(lastMessage.getCreatedAtMillis());
+                date.setText(dateString);
                 date.setVisibility(VISIBLE);
-                date.setText(dateFormat.format(lastMessage.getCreatedAtMillis()));
             } else {
                 date.setVisibility(GONE);
             }
 
         } else {
             avatar.setImageResource(R.drawable.avatar);
-            userName.setText("Default");
-            message.setText("no message yet");
+            userName.setText(R.string.no_user);
+            message.setText(R.string.empty_chat);
         }
     }
 

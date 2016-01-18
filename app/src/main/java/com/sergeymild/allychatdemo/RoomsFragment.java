@@ -90,7 +90,7 @@ public class RoomsFragment extends Fragment implements RoomFragmentListener {
 
     @Override
     public void startChatActivity(@NonNull Room room) {
-        startActivity(new Intent(getActivity(), MainActivity.class)
+        startActivity(new Intent(getActivity(), ChatActivity.class)
                 .putExtra("isSupport", room.isSupport())
                 .putExtra("roomId", room.getId()));
     }

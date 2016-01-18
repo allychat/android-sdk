@@ -7,6 +7,11 @@
     <string name="transfer_message_failed_message">Не удалось отправить сообщение.</string>
     <string name="chat_offline">Нет подключения</string>
     <string name="login_hint">Логин</string>
+    <string name="host_hint">Адресс</string>
     <string name="login_error">Логин должен быть заполнен</string>
     <string name="login_button">Войти</string>
+    <string name="login_button_loading">Загрузка</string>
+    <string name="empty_chat">Empty chat room</string>
+    <string name="no_user">No user</string>
+    <string name="last_message_image">Last message was image.</string>
 </resources>
