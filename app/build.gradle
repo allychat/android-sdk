@@ -37,7 +37,7 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.2.0'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
-    compile 'sergeymild.com.library:gallery:1.0@aar'
+    compile 'com.sergeymild.filepicker:filepicker:0.0.1@aar'
 
     compile 'com.sergeymild.chat:chat-release:2.0.0@aar'
     //TODO зависимости нужные для работы SDK !!!!!

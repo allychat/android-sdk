@@ -1,13 +1,15 @@
 {
   "project_info": {
     "project_id": "allychat-demo",
-    "project_number": "39732375091",
+    "project_number": "117785100999",
+    //"project_number": "39732375091",
     "name": "AllyChat-Demo"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:39732375091:android:4ae77edaccb36aee",
+        //"mobilesdk_app_id": "1:39732375091:android:4ae77edaccb36aee",
+        "mobilesdk_app_id": "1:117785100999:android:4ae77edaccb36aee",
         "client_id": "android:com.sergeymild.allychatdemo",
         "client_type": 1,
         "android_client_info": {
