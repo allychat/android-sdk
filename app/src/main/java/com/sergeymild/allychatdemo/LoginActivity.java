@@ -7,18 +7,17 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.sergeymild.allychatdemo.gcm.AllyChattPreferences;
 import com.sergeymild.allychatdemo.gcm.RegistrationIntentService;
 import com.sergeymild.chat.AllyChat;
-import com.sergeymild.chat.callbacks.OnFailureInitialize;
-import com.sergeymild.chat.callbacks.OnSuccessInitialize;
-import com.sergeymild.chat.models.ErrorState;
 import com.sergeymild.chat.models.SdkSettings;
 
 import butterknife.Bind;
@@ -29,9 +28,11 @@ import butterknife.OnClick;
  * Created by sergeyMild on 27/12/15.
  */
 public class LoginActivity extends BaseActivity {
-    @Bind(R.id.login)                   EditText loginEditText;
-    @Bind(R.id.login_button)            Button loginButton;
-    @Bind(R.id.login_text_input_layout) TextInputLayout loginTextInputLayout;
+    @Bind(R.id.login)                   protected EditText loginEditText;
+    @Bind(R.id.host)                    protected EditText hostEditText;
+    @Bind(R.id.login_button)            protected Button loginButton;
+    @Bind(R.id.login_text_input_layout) protected TextInputLayout loginTextInputLayout;
+    @Bind(R.id.progressBar)             protected ProgressBar progressBar;
 
     private BroadcastReceiver mRegistrationBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -55,12 +56,17 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        hostEditText.setText("https://alfa-dev.allychat.ru");
         loginEditText.setText("AGC1O4");
     }
 
     @OnClick(R.id.login_button)
     protected void onLoginClicked() {
+        progressBar.setVisibility(View.VISIBLE);
+        loginButton.setText(R.string.login_button_loading);
+        loginEditText.setEnabled(false);
         loginButton.setEnabled(false);
+        hostEditText.setEnabled(false);
         String loginName = loginEditText.getText().toString();
         boolean hasError = loginName.length() <= 0;
         String error = hasError ? getString(R.string.login_error) : null;
@@ -69,6 +75,10 @@ public class LoginActivity extends BaseActivity {
 
         if (hasError) {
             loginButton.setEnabled(true);
+            loginEditText.setEnabled(true);
+            hostEditText.setEnabled(true);
+            progressBar.setVisibility(View.GONE);
+            loginButton.setText(R.string.login_button);
             return;
         }
 
@@ -77,8 +87,8 @@ public class LoginActivity extends BaseActivity {
             AllyChat.Builder builder = new AllyChat.Builder().setContext(getApplicationContext());
 
             builder.setAlias(loginEditText.getText().toString());
-            builder.setHost("my-dev.allychat.ru")
-                    .setAppId("app")
+            builder.setHost(getHost())
+                    .setAppId("sense")
                     .setIsLoggingEnabled(true);
 
             builder.setOnSuccessInitialize(chat -> {
@@ -87,11 +97,20 @@ public class LoginActivity extends BaseActivity {
                 startService(intent);
 
             }).setOnFailureInitialize(errorState -> {
+                progressBar.setVisibility(View.GONE);
                 loginButton.setEnabled(true);
+                loginEditText.setEnabled(true);
+                hostEditText.setEnabled(true);
+                loginButton.setText(R.string.login_button);
                 SdkSettings.getInstance().setIsInProcessInitializing(false);
             }).build();
         }
 
+    }
+
+    private String getHost() {
+        String host = hostEditText.getText().toString();
+        return !TextUtils.isEmpty(host) ? host :  "https://alfa-dev.allychat.ru";
     }
 
 
