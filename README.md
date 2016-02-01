@@ -71,7 +71,7 @@ new AllyChat.Builder().setContext(getApplicationContext())
 # 3. Отправка и получение сообщений
 Перед отправкой запросов через AllyChatApi и для получения новых входящих сообщений, необходимо подписаться на соответствующие обратные вызовы при помощи соответствующих статических методов класса AllyChatSdk:
 ```
-    class ChatActivity extends AppCompatActivity implements NetworkStateListener, OperatorChatFragmentCallbacks, OnMessage {
+    class ChatActivity extends AppCompatActivity implements NetworkStateListener, OnMessage {
         ...
         @Override
         public void onResume() {
