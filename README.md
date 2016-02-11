@@ -7,6 +7,16 @@
 - Java 1.7 or greater
 - Android 4.0 or greater
 
+добавить в build.gradle файл главного модуля:
+```
+android {
+    ...
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+}
+```
+
 # 1. Нaчало работы с sdk
 Инициализация и олучение instance чата:
 ```
@@ -33,19 +43,31 @@ new AllyChat.Builder().setContext(getApplicationContext())
 
 
 # 2. Методы API
-Вызовы API доступны через статические методы AllyChatApi:
+Вызовы API доступны через публичные статические методы AllyChatApi:
 ```
-    public static void sendMessage(Message message)
-    public static void buildAndSend(String roomId, String messageText, String filePath, CountingTypedFile.ProgressListener progressListener)
-    public static void resendMessage(String messageLocalId)
-    public static void registerForGCM(String deviceToken, AllyChatCallback<Integer> requestCallback)
-    public static void getRooms(final AllyChatCallback<List<Room>> requestCallback)
-    public static void getMessages(final String roomId, final int limit, final String lastReadMessageId, final boolean showNew, final AllyChatCallback<List<Message>> requestCallback)
-    public static void getLastMessages(final String roomId, final int limit, final AllyChatCallback<List<Message>> requestCallback)
-    public static void getFirstMessages(final String roomId, final int limit, final AllyChatCallback<List<Message>> requestCallback)
-    public static void getUser(String userId, String roomId, final AllyChatCallback<User> requestCallback)
-    public static void readMessage(final String messageLocalId)
+    getRooms(ChatCallback<List<Room>> callback)
+    createRoom(String userAlias, ChatCallback<Room> callback)
+    getUnreadCount(String roomId, ChatCallback<Integer> callback)
+
+
+    messagesByOffset(Room room, int limit, int offset, ChatCallback<List<Message>> callback)
+    messagesBeforeMessage(Message message, Room room, int limit, ChatCallback<List<Message>> callback)
+    messagesAfterMessage(Message message, Room room, int limit, ChatCallback<List<Message>> callback)
+
+
+    readMessage(String messageLocalId)
+    sendMessage(Message message, ChatCallback<Message> callback,
+                                       @Nullable CountingTypedFile.ProgressListener fileUploadListener)
+    resendMessage(Message message, ChatCallback<Message> callback)
+    buildAndSend(Room room, String messageText, String filePath, CountingTypedFile.ProgressListener progressListener, @Nullable ChatCallback<Message> callback)
+    buildMessage(Room room, String messageText, @Nullable String filePath)
+
+
+    registerGcm(Context context, String token)
+    unRegisterGcm(Context context)
 ```
+При вызове методов `messagesBeforeMessage` и `messagesAfterMessage`, а так же все отправленные и полученные через sdk сообщения кешируются.
+При повторном запросе того же участка переписки возвращаются сообщения из кеша.
 
 За исключением методов отсылки сообщений, все api работают по одинаковой схеме: требуется передать в метод callback, параметризованный нужным типом.
 Например, для получения списка комнат:
@@ -88,6 +110,7 @@ new AllyChat.Builder().setContext(getApplicationContext())
         @Override
         public void onStop() {
             super.onStop();
+            // call this methods then you need to finish working with chat. To use chat again, build new AllyChat instance
             AllyChatApi.clearSession(true);
             AllyChat.getInstance().close()
         }
@@ -98,14 +121,18 @@ new AllyChat.Builder().setContext(getApplicationContext())
 
 Пример отправки сообщения с изображением:
 ```
-    AllyChatApi.buildAndSend(roomId, messageText, absoluteFilePath);
+    AllyChatApi.buildAndSend(room, messageText, absoluteFilePath, progressListener, callback);
 ```
-# 4 Уведомление о прочитанном сообщении
-Метод, позволяющий отмечать сообщение как прочитанное:
+# 4 Уведомления
+Уведомление о новом сообщении приходит в в общий MessageStatusCallback на который клиент подписывается посредством AllyChatApi.registerListeners(this);
 ```
-    public static void readMessage(final String messageLocalId)
+@Override
+public void onMessage(@NonNull Message message) {
+    roomView.addMessageToList(message);
+}
 ```
-Уведомление о завершении операции приходит в общий MessageStatusCallback на который клиент подписывается посредством AllyChatApi.registerListeners(this); :
+
+Уведомление о завершении операций, для которых нет callback, приходят в onMessageStatusChanged:
 ```
     @Override
     public void onMessageStatusChanged(@NonNull Message message) {
