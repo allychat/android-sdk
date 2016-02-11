@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/accelerate_cubic">
+    <objectAnimator
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:duration="@integer/fragment_slide_animation_time"
+        android:propertyName="x"
+        android:valueFrom="1000"
+        android:valueTo="0"
+        android:valueType="floatType" />
+</set>

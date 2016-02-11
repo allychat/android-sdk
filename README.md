@@ -55,7 +55,7 @@ new AllyChat.Builder().setContext(getApplicationContext())
     messagesAfterMessage(Message message, Room room, int limit, ChatCallback<List<Message>> callback)
 
 
-    readMessage(String messageLocalId)
+    readMessage(String messageLocalId, ChatCallback<Void> callback)
     sendMessage(Message message, ChatCallback<Message> callback,
                                        @Nullable CountingTypedFile.ProgressListener fileUploadListener)
     resendMessage(Message message, ChatCallback<Message> callback)
@@ -69,7 +69,7 @@ new AllyChat.Builder().setContext(getApplicationContext())
 При вызове методов `messagesBeforeMessage` и `messagesAfterMessage`, а так же все отправленные и полученные через sdk сообщения кешируются.
 При повторном запросе того же участка переписки возвращаются сообщения из кеша.
 
-За исключением методов отсылки сообщений, все api работают по одинаковой схеме: требуется передать в метод callback, параметризованный нужным типом.
+Большинство api работают по одинаковой схеме: требуется передать в метод callback, параметризованный нужным типом.
 Например, для получения списка комнат:
 
 ```
