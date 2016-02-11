@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AllyChat</string>
+    <string name="login_activity">Вход</string>
+    <string name="room_activity">Комнаты</string>
+    <string name="chat_activity">Чат</string>
+    <string name="chat_placeholder">Текст сообщения</string>
+    <string name="transfer_message_failed_message">Не удалось отправить сообщение.</string>
+    <string name="chat_offline">Нет подключения</string>
+    <string name="login_hint">Логин</string>
+    <string name="login_error">Логин должен быть заполнен</string>
+    <string name="login_button">Войти</string>
+</resources>

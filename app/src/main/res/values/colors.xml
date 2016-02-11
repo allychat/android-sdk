@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffa400</color>
+    <color name="colorPrimaryDark">#ca821e</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="chat_background_color">#eeeeee</color>
+    <color name="green1">#09b289</color>
+    <color name="gray">#9b9b9b</color>
+
+    <color name="aquamarine">#50e3c2</color>
+    <color name="aquamarine_80">#cc50e3c2</color>
+    <color name="aquamarine_dark">#40b59b</color>
+</resources>
