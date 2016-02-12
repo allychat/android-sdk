@@ -54,6 +54,7 @@ dependencies {
     compile 'com.annimon:stream:1.0.6'
     compile 'com.google.code.gson:gson:1.7.2'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.realm:realm-android:0.87.4'
     compile('com.github.afollestad.material-dialogs:core:0.8.5.2@aar') {
         transitive = true
