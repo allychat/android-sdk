@@ -9,4 +9,5 @@
     <string name="login_hint">Логин</string>
     <string name="login_error">Логин должен быть заполнен</string>
     <string name="login_button">Войти</string>
+    <string name="settings">Настройки</string>
 </resources>

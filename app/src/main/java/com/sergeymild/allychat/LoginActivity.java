@@ -31,6 +31,8 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends BaseActivity {
     @Bind(R.id.login)                   EditText loginEditText;
+    @Bind(R.id.hostname)                EditText hostNameEditText;
+    @Bind(R.id.appid)                   EditText appIdEditText;
     @Bind(R.id.login_button)            Button loginButton;
     @Bind(R.id.login_text_input_layout) TextInputLayout loginTextInputLayout;
 
@@ -67,7 +69,8 @@ public class LoginActivity extends BaseActivity {
 
 
         String gcmToken = getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("token", null);
-        initializeChat(loginEditText.getText().toString(), gcmToken);
+        initializeChat(loginEditText.getText().toString(), hostNameEditText.getText().toString(),
+                appIdEditText.getText().toString(), gcmToken);
     }
 
 
@@ -76,11 +79,11 @@ public class LoginActivity extends BaseActivity {
      * @param alias actual user alias or a blank string in case of anonymous user
      * @param token token received after subscription to GCM push using AllyChat's SENDER_ID
      */
-    private void initializeChat(String alias, String token) {
+    private void initializeChat(String alias, String hostName, String appId, String token) {
         new AllyChat.Builder().setContext(getApplicationContext())
                 .setAlias(alias)
-                .setHost("my-dev.allychat.ru")
-                .setAppId("app")
+                .setHost(hostName)
+                .setAppId(appId)
                 .setGcmPushToken(token)
                 .setIsLoggingEnabled(true)
                 .setOnSuccessInitialize(new OnSuccessInitialize() {

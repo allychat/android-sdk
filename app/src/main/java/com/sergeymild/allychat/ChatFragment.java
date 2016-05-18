@@ -24,6 +24,7 @@ import com.sergeymild.chat.models.ErrorState;
 import com.sergeymild.chat.models.Message;
 import com.sergeymild.chat.models.Room;
 import com.sergeymild.chat.services.http.AllyChatApi;
+import com.sergeymild.chat.services.http.AllyChatApiDeprecated;
 import com.sergeymild.chat.services.http.AllyChatRestAdapterBuilder;
 import com.sergeymild.chat.utils.Checks;
 import com.sergeymild.event_bus.EventBus;
@@ -192,7 +193,8 @@ public class ChatFragment extends Fragment implements NetworkStateListener, Oper
 
     @Override
     public void onMessage(@NonNull Message message) {
-        roomView.addMessageToList(message);
+        if (message.getRoom().equals(room.getId()))
+            roomView.addMessageToList(message);
     }
 
     @Override
@@ -218,7 +220,9 @@ public class ChatFragment extends Fragment implements NetworkStateListener, Oper
             if (photoEntry != null && !TextUtils.isEmpty(photoEntry.path) && new File(photoEntry.path).exists()) {
                 Message message = AllyChatApi.buildMessage(room, "", photoEntry.path);
                 roomView.addMessageToList(message);
-                AllyChatApi.sendMessage(message, addMessageToListOnSuccess, null);
+//                AllyChatApi.sendMessage(message, addMessageToListOnSuccess, null);
+                AllyChatApiDeprecated.buildAndSendSupportMessage(message.getMessage(), photoEntry.path,
+                        null);
             }
         }
     }

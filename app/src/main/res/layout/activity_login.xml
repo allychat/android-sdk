@@ -30,6 +30,34 @@
                 android:hint="@string/login_hint"/>
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/hostname_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+            <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/hostname"
+                    android:text="my-dev.allychat.ru"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hostname"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/appid_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+            <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/appid"
+                    android:text="app"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Application id"/>
+        </android.support.design.widget.TextInputLayout>
+
         <Button
             android:id="@+id/login_button"
             style="@style/OpaqueButton.Aquamarine"
