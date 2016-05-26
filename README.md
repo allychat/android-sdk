@@ -1,19 +1,22 @@
-# AllyChat API
-версия 1.3.0
+# Подключение sdk:
 
-дата обновления 11/02/16
-
-# Prerequisites
-- Java 1.7 or greater
-- Android 4.0 or greater
-
-добавить в build.gradle файл главного модуля:
+подключить зависимость:
 ```
+repositories {
+    ..
+    jcenter()
+}
+
 android {
     ...
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
+}
+
+dependencies {
+    ...
+    compile ('com.magneta.sdk:chat:1.3.+') { transitive = true }`
 }
 ```
 
@@ -21,29 +24,21 @@ android {
 Инициализация и олучение instance чата:
 ```
 new AllyChat.Builder().setContext(getApplicationContext())
-                    .setAlias(alias)
-                    .setHost("alfa-dev.allychat.ru")
-                    .setAppId("app")
-                    .setGcmPushToken(token)
-                    .setIsLoggingEnabled(true)
-                    .setOnSuccessInitialize(new OnSuccessInitialize() {
-                        @Override
-                        public void onSuccess(@NonNull AllyChat chat) {
-                            // since this moment, you either can use this chat reference or call AllyChat.getInstance()
-                        }
-                    }).setOnFailureInitialize(new OnFailureInitialize() {
-                        @Override
-                        public void onFailInitialize(ErrorState errorState) {
-                            // handle error
-                        }
-                    }).build();
+                .setAlias(alias)
+                .setHost(hostName)
+                .setAppId(appId)
+                .setGcmPushToken(token)
+                .setIsLoggingEnabled(true)
+                .setOnSuccessInitialize(allyChat -> {})
+                .setOnFailureInitialize(errorState -> {})
+                .build()
 ```
-.setAlias() можно не вызывать или передавать в них пустую строку - в этом случае юзер будет анонимным.
-То же c .setGcmPushToken(), в этом случае пуш-уведомления не приходят.
+`.setAlias()` можно не вызывать или передавать в них пустую строку - в этом случае будет использоваться анонимный пользователь.
+То же c `.setGcmPushToken()`, в этом случае не происходит подписки на пуш-уведомления из чата.
 
 
 # 2. Методы API
-Вызовы API доступны через публичные статические методы AllyChatApi:
+Вызовы API доступны через публичные статические методы класса AllyChatApi:
 ```
     getRooms(ChatCallback<List<Room>> callback)
     createRoom(String userAlias, ChatCallback<Room> callback)
@@ -119,9 +114,16 @@ new AllyChat.Builder().setContext(getApplicationContext())
     }
 ```
 
+Пример отправки сообщения с текстом `text` в комнату `room`:
+```
+AllyChatApi.sendMessage(AllyChatUtils.messageFromText(text, room), AllyChatUtils.chatCallback(sentMessage -> {}, error -> {}),  null);
+```
+если нужно исползовать суппорт комнату, можно воспользоваться `AllyChatUtils.supportRoom()`
+
+
 Пример отправки сообщения с изображением:
 ```
-    AllyChatApi.buildAndSend(room, messageText, absoluteFilePath, progressListener, callback);
+AllyChatApi.buildAndSend(room, messageText, absoluteFilePath, progressListener, callback);
 ```
 # 4 Уведомления
 Уведомление о новом сообщении приходит в в общий MessageStatusCallback на который клиент подписывается посредством AllyChatApi.registerListeners(this);
@@ -134,8 +136,8 @@ public void onMessage(@NonNull Message message) {
 
 Уведомление о завершении операций, для которых нет callback, приходят в onMessageStatusChanged:
 ```
-    @Override
-    public void onMessageStatusChanged(@NonNull Message message) {
-        roomView.updateMessageInList(message);
-    }
+@Override
+public void onMessageStatusChanged(@NonNull Message message) {
+    roomView.updateMessageInList(message);
+}
 ```
