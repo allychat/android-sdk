@@ -1,15 +1,29 @@
-# Подключение sdk:
+# Добавление зависимости:
 
-Добавление зависимости:
+build.gradle в корневой папке проекта:
+
+```
+buildscript {
+    ...
+    dependencies {
+        ...
+        classpath "io.realm:realm-gradle-plugin:0.90.0"
+    }
+}
+```
+
+build.gradle модуля приложения:
 ```
 repositories {
-    ..
+    ...
     jcenter()
 }
 
 android {
     ...
     packagingOptions {
+        // realm-related
+        exclude "lib/arm64-v8a/librealm-jni.so"
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 }
@@ -19,6 +33,7 @@ dependencies {
     compile ('com.magneta.sdk:chat:1.3.+') { transitive = true }`
 }
 ```
+На номер актуальной версии можно посмотреть [здесь](https://bintray.com/magneta/android_sdk/android-sdk/view)
 
 # 1. Нaчало работы с sdk
 Инициализация и олучение instance чата:

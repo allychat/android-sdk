@@ -38,7 +38,7 @@
 
             <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/hostname"
-                    android:text="my-dev.allychat.ru"
+                    android:text="stage.magneta.io"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Hostname"/>
