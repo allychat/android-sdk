@@ -23,8 +23,8 @@ public class RoomsActivity extends BaseActivity implements RoomsFragment.ChatSel
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if (AllyChat.getInstance() != null) AllyChat.getInstance().close();
     }
 

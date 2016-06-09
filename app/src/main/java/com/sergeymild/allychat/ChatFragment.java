@@ -220,9 +220,7 @@ public class ChatFragment extends Fragment implements NetworkStateListener, Oper
             if (photoEntry != null && !TextUtils.isEmpty(photoEntry.path) && new File(photoEntry.path).exists()) {
                 Message message = AllyChatApi.buildMessage(room, "", photoEntry.path);
                 roomView.addMessageToList(message);
-//                AllyChatApi.sendMessage(message, addMessageToListOnSuccess, null);
-                AllyChatApiDeprecated.buildAndSendSupportMessage(message.getMessage(), photoEntry.path,
-                        null);
+                AllyChatApi.sendMessage(message, addMessageToListOnSuccess, null);
             }
         }
     }
