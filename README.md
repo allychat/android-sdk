@@ -30,7 +30,7 @@ android {
 
 dependencies {
     ...
-    compile ('com.magneta.sdk:chat:1.3.+') { transitive = true }`
+    compile ('com.magneta.sdk:chat:1.3.+') { transitive = true }
 }
 ```
 На номер актуальной версии можно посмотреть [здесь](https://bintray.com/magneta/android_sdk/android-sdk/view)
@@ -46,7 +46,7 @@ new AllyChat.Builder().setContext(getApplicationContext())
                 .setIsLoggingEnabled(true)
                 .setOnSuccessInitialize(allyChat -> {})
                 .setOnFailureInitialize(errorState -> {})
-                .build()
+                .build();
 ```
 `.setAlias()` можно не вызывать или передавать в них пустую строку - в этом случае будет использоваться анонимный пользователь.
 То же c `.setGcmPushToken()`, в этом случае не происходит подписки на пуш-уведомления из чата.
@@ -121,8 +121,7 @@ class ChatActivity extends AppCompatActivity implements NetworkStateListener, On
     public void onStop() {
         super.onStop();
         // call this methods then you need to finish working with chat. To use chat again, build new AllyChat instance
-        AllyChatApi.clearSession(true);
-        AllyChat.getInstance().close()
+        AllyChat.getInstance().close();
     }
 
     ...
