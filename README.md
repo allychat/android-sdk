@@ -30,7 +30,7 @@ android {
 
 dependencies {
     ...
-    compile ('com.magneta.sdk:chat:1.3.+') { transitive = true }
+    compile ('com.magneta.sdk:chat:1.3.xx') { transitive = true }
 }
 ```
 На номер актуальной версии можно посмотреть [здесь](https://bintray.com/magneta/android_sdk/android-sdk/view)
