@@ -34,6 +34,7 @@ dependencies {
 }
 ```
 На номер актуальной версии можно посмотреть [здесь](https://bintray.com/magneta/android_sdk/android-sdk/view)
+Конфигурация proguard-rules.pro для сдк [ссылка]https://github.com/allychat/android-sdk/blob/master/app/proguard-rules.pro
 
 # 1. Нaчало работы с sdk
 Инициализация и олучение instance чата:
